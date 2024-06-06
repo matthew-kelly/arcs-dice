@@ -1,10 +1,5 @@
 @import url('./normalize.css');
 
-@font-face {
-	font-family: 'FMBolyar Pro 500';
-	src: url('./FMBolyarPro-500.woff2');
-}
-
 :root {
 	--black: rgb(19 17 11);
 	--grey: rgb(55, 54, 48);
@@ -12,6 +7,11 @@
 	--tan: rgb(222 211 199);
 	--tan-fade: rgba(243, 224, 204, 0.9);
 	--yellow: rgb(244 173 28);
+}
+
+@font-face {
+	font-family: 'FMBolyar Pro 500';
+	src: url('./FMBolyarPro-500.woff2');
 }
 
 html,
@@ -32,6 +32,7 @@ h6,
 p,
 button {
 	color: var(--black);
+	margin: 0;
 }
 
 button {
@@ -40,11 +41,12 @@ button {
 	cursor: pointer;
 	opacity: 1;
 	transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
-}
-button:disabled {
-	opacity: 0.5;
-	cursor: not-allowed;
-	pointer-events: none;
+
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+		pointer-events: none;
+	}
 }
 
 .row {

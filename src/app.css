@@ -1,0 +1,63 @@
+@import url('./normalize.css');
+
+@font-face {
+	font-family: 'FMBolyar Pro 500';
+	src: url('./FMBolyarPro-500.woff2');
+}
+
+:root {
+	--black: rgb(19 17 11);
+	--grey: rgb(55, 54, 48);
+	--white: rgb(244 238 235);
+	--tan: rgb(222 211 199);
+	--tan-fade: rgba(243, 224, 204, 0.9);
+	--yellow: rgb(244 173 28);
+}
+
+html,
+* {
+	font-family: 'FMBolyar Pro 500', monospace;
+	font-weight: normal;
+	font-style: normal;
+	font-size: 14px;
+	user-select: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+button {
+	color: var(--black);
+}
+
+button {
+	padding: 8px 16px;
+	border: 2px solid var(--black);
+	cursor: pointer;
+	opacity: 1;
+	transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+}
+button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+	pointer-events: none;
+}
+
+.row {
+	display: flex;
+}
+
+.Assault {
+	background-color: rgb(171 45 40);
+	color: var(--white);
+}
+.Skirmish {
+	background-color: rgb(26 165 202);
+}
+.Raid {
+	background-color: rgb(222 111 44);
+}

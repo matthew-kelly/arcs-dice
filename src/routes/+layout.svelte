@@ -1,13 +1,28 @@
 <script lang="ts">
-	import '../app.css';
+	import '../app.pcss';
+
+	let { children } = $props();
+
+	function noDoubleClick(event: MouseEvent) {
+		event.preventDefault();
+	}
+
+	$effect(() => {
+		// prevent doubletap zoom on ios
+		document.addEventListener('dblclick', noDoubleClick, { passive: false });
+
+		return () => {
+			document.removeEventListener('dblclick', noDoubleClick);
+		};
+	});
 </script>
 
 <div class="app-container">
 	<h1>Arcs Dice</h1>
-	<slot />
+	{@render children()}
 </div>
 
-<style>
+<style lang="postcss">
 	.app-container {
 		background-image: url('../space-bg.svg');
 		background-position: center;

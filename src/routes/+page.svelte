@@ -22,7 +22,7 @@
 		total: { ...base },
 		atLeastOne: { ...base },
 	});
-	let width = '40px';
+	let width = '47px';
 
 	function addDie(type: DieType) {
 		if (selectedDice[type] < 6) {
@@ -113,17 +113,17 @@
 
 		<div class="die-section" style="--width: {width};">
 			<div class="die-col">
-				{#each Array(skirmishDice) as _, i}
+				{#each Array(skirmishDice) as _, i (i)}
 					<DieIcon type="Skirmish" onclick={() => removeDie('Skirmish')} />
 				{/each}
 			</div>
 			<div class="die-col">
-				{#each Array(assaultDice) as _, i}
+				{#each Array(assaultDice) as _, i (i)}
 					<DieIcon type="Assault" onclick={() => removeDie('Assault')} />
 				{/each}
 			</div>
 			<div class="die-col">
-				{#each Array(raidDice) as _, i}
+				{#each Array(raidDice) as _, i (i)}
 					<DieIcon type="Raid" onclick={() => removeDie('Raid')} />
 				{/each}
 			</div>
@@ -161,9 +161,10 @@
 	</div>
 </div>
 
-<style>
+<style lang="postcss">
 	.container {
 		--padding: 8px;
+		--max-height: 150px;
 
 		display: flex;
 		flex-direction: column;
@@ -182,7 +183,7 @@
 		display: flex;
 		align-items: center;
 		gap: 8px;
-		height: 150px;
+		height: var(--max-height);
 		margin-bottom: 16px;
 	}
 	.dice-buttons {
@@ -190,10 +191,11 @@
 		flex-direction: column;
 		justify-content: center;
 		gap: 4px;
-	}
-	.dice-buttons button {
-		font-size: 16px;
-		padding: 12px 24px;
+
+		button {
+			font-size: 16px;
+			padding: 12px 24px;
+		}
 	}
 	.die-section {
 		flex-grow: 1;
@@ -221,19 +223,22 @@
 		transform: translateX(25%);
 		height: 100%;
 		justify-content: space-around;
+
+		button {
+			background: inherit;
+			border: none;
+			padding: 8px;
+			font-size: 12px;
+			color: var(--grey);
+			opacity: 1;
+			transition: all 0.1s cubic-bezier(0.19, 1, 0.22, 1);
+
+			&:disabled {
+				opacity: 0;
+			}
+		}
 	}
-	.remove-buttons button {
-		background: inherit;
-		border: none;
-		padding: 8px;
-		font-size: 12px;
-		color: var(--grey);
-		opacity: 1;
-		transition: all 0.1s cubic-bezier(0.19, 1, 0.22, 1);
-	}
-	.remove-buttons button:disabled {
-		opacity: 0;
-	}
+
 	.odds-table {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
@@ -241,20 +246,21 @@
 		width: 100%;
 		max-width: 386px;
 		margin: 0 auto;
-	}
-	.odds-table .title {
-		font-size: 16px;
-		padding: 4px;
-		border-top: 2px solid var(--grey);
-		border-bottom: 2px solid var(--grey);
-	}
-	.odds-table .heading {
-		grid-column: 1 / span 2;
-		margin: 8px 0 4px;
-	}
-	.odds-table span {
-		border-bottom: 1px solid var(--grey);
-		padding-bottom: 2px;
+
+		.title {
+			font-size: 16px;
+			padding: 4px;
+			border-top: 2px solid var(--grey);
+			border-bottom: 2px solid var(--grey);
+		}
+		.heading {
+			grid-column: 1 / span 2;
+			margin: 8px 0 4px;
+		}
+		span {
+			border-bottom: 1px solid var(--grey);
+			padding-bottom: 2px;
+		}
 	}
 
 	.credit {
@@ -263,27 +269,39 @@
 		justify-content: space-between;
 		align-items: end;
 		gap: 16px;
-	}
-	.credit a {
-		font-size: 10px;
-		text-decoration: none;
-		text-wrap: balance;
-		max-width: 120px;
-	}
-	.credit a:last-of-type {
-		text-align: end;
+
+		a {
+			font-size: 10px;
+			text-decoration: none;
+			text-wrap: balance;
+			max-width: 120px;
+			color: var(--grey);
+
+			&:hover {
+				text-decoration: initial;
+			}
+
+			&:last-of-type {
+				text-align: end;
+			}
+		}
 	}
 
 	@media (max-width: 512px) {
-		.dice-overview {
-			height: 308px;
+		.container {
+			--max-height: 308px;
 		}
-		.dice-buttons button {
-			font-size: 14px;
-			padding: 8px 16px;
-			writing-mode: vertical-rl;
-			rotate: 180deg;
-			min-height: 100px;
+		.dice-overview {
+			margin-bottom: 8px;
+		}
+		.dice-buttons {
+			button {
+				font-size: 14px;
+				padding: 8px 16px;
+				writing-mode: vertical-rl;
+				rotate: 180deg;
+				min-height: 100px;
+			}
 		}
 		.die-section {
 			grid-template-columns: 1fr;
@@ -292,6 +310,8 @@
 		.die-col {
 			grid-template-columns: repeat(3, 1fr);
 			grid-template-rows: repeat(2, 1fr);
+			height: 100px;
+			min-width: 100%;
 		}
 	}
 </style>

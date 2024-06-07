@@ -1,6 +1,11 @@
 <script lang="ts">
 	import { AssaultDie, RaidDie, SkirmishDie, type Die, type DieType, type Icon } from '$lib/dice';
 	import DieIcon from './DieIcon.svelte';
+	import hitImg from '$lib/images/hit.png';
+	import selfhitImg from '$lib/images/selfhit.png';
+	import interceptImg from '$lib/images/intercept.png';
+	import buildinghitImg from '$lib/images/buildinghit.png';
+	import keyImg from '$lib/images/key.png';
 
 	let selectedDice: { [key in DieType]: number } = $state({
 		Skirmish: 0,
@@ -22,7 +27,6 @@
 		total: { ...base },
 		atLeastOne: { ...base },
 	});
-	let width = '47px';
 
 	function addDie(type: DieType) {
 		if (selectedDice[type] < 6) {
@@ -106,12 +110,18 @@
 <div class="container">
 	<div class="dice-overview">
 		<div class="dice-buttons">
-			<button class="Skirmish" onclick={() => addDie('Skirmish')} disabled={skirmishDice === 6}>Skirmish</button>
-			<button class="Assault" onclick={() => addDie('Assault')} disabled={assaultDice === 6}>Assault</button>
-			<button class="Raid" onclick={() => addDie('Raid')} disabled={raidDice === 6}>Raid</button>
+			<button class="Skirmish" onclick={() => addDie('Skirmish')} disabled={skirmishDice === 6}>
+				<span>Skirmish</span>
+			</button>
+			<button class="Assault" onclick={() => addDie('Assault')} disabled={assaultDice === 6}>
+				<span>Assault</span>
+			</button>
+			<button class="Raid" onclick={() => addDie('Raid')} disabled={raidDice === 6}>
+				<span>Raid</span>
+			</button>
 		</div>
 
-		<div class="die-section" style="--width: {width};">
+		<div class="die-section">
 			<div class="die-col">
 				{#each Array(skirmishDice) as _, i (i)}
 					<DieIcon type="Skirmish" onclick={() => removeDie('Skirmish')} />
@@ -136,28 +146,49 @@
 	</div>
 
 	<div class="odds-table">
-		<span class="title">Expected Number</span>
-		<span class="title">Chance of at least 1</span>
+		<div class="title-row">
+			<span class="title">Expected Number</span>
+			<span class="title">Chance of at least 1</span>
+		</div>
+
 		<p class="heading">Hits</p>
 		<span>{round(totalOdds.total.hit)}</span>
+		<img src={hitImg} alt="hit icon" />
 		<span>{round(totalOdds.atLeastOne.hit, true) + '%'}</span>
+		<div class="divider"></div>
+
 		<p class="heading">Self Hits</p>
 		<span>{round(totalOdds.total.selfhit)}</span>
+		<img src={selfhitImg} alt="self-hit icon" />
 		<span>{round(totalOdds.atLeastOne.selfhit, true) + '%'}</span>
+		<div class="divider"></div>
+
 		<p class="heading">Intercepts</p>
 		<span>{round(totalOdds.total.intercept)}</span>
+		<img src={interceptImg} alt="intercept icon" />
 		<span>{round(totalOdds.atLeastOne.intercept, true) + '%'}</span>
+		<div class="divider"></div>
+
 		<p class="heading">Keys</p>
 		<span>{round(totalOdds.total.key)}</span>
+		<img src={keyImg} alt="key icon" />
 		<span>{round(totalOdds.atLeastOne.key, true) + '%'}</span>
+		<div class="divider"></div>
+
 		<p class="heading">Building Hits</p>
 		<span>{round(totalOdds.total.buildinghit)}</span>
+		<img src={buildinghitImg} alt="building-hit icon" />
 		<span>{round(totalOdds.atLeastOne.buildinghit, true) + '%'}</span>
+		<div class="divider"></div>
 	</div>
 
 	<div class="credit">
-		<a href="https://ledergames.com/products/arcs" target="_blank">Arcs by Leder Games</a>
-		<a href="https://matthewkelly.ca" target="_blank">Site by Matty Kelly</a>
+		<a href="https://ledergames.com/products/arcs" target="_blank">
+			Arcs by <span>Leder Games</span>
+		</a>
+		<a href="https://matthewkelly.ca" target="_blank">
+			Site by <span>Matty Kelly</span>
+		</a>
 	</div>
 </div>
 
@@ -165,6 +196,8 @@
 	.container {
 		--padding: 8px;
 		--max-height: 150px;
+		--gap: 4px;
+		--height-calc: calc((var(--max-height) - var(--gap) * 2) / 3);
 
 		display: flex;
 		flex-direction: column;
@@ -176,7 +209,8 @@
 		margin: 0 var(--padding) var(--padding);
 		background: var(--tan-fade);
 		border: var(--padding) solid var(--yellow);
-		overflow: auto;
+		overflow-x: hidden;
+		overflow-y: auto;
 	}
 	.dice-overview {
 		position: relative;
@@ -190,11 +224,12 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		gap: 4px;
+		gap: var(--gap);
 
 		button {
 			font-size: 16px;
 			padding: 12px 24px;
+			height: var(--height-calc);
 		}
 	}
 	.die-section {
@@ -203,16 +238,16 @@
 		height: 100%;
 		display: grid;
 		grid-template-columns: 1fr;
-		gap: 4px;
+		gap: var(--gap);
 	}
 	.die-col {
 		position: relative;
 		display: grid;
 		grid-template-columns: repeat(6, 1fr);
 		grid-template-rows: repeat(1, 1fr);
-		gap: 4px;
-		width: 100%;
-		height: 100%;
+		gap: var(--gap);
+		/* width: 100%; */
+		height: var(--height-calc);
 		max-width: fit-content;
 	}
 	.remove-buttons {
@@ -241,25 +276,41 @@
 
 	.odds-table {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
+		grid-template-columns: repeat(3, 1fr);
 		text-align: center;
 		width: 100%;
 		max-width: 386px;
 		margin: 0 auto;
 
-		.title {
-			font-size: 16px;
-			padding: 4px;
-			border-top: 2px solid var(--grey);
-			border-bottom: 2px solid var(--grey);
+		.title-row {
+			grid-column: 1 / span 3;
+			display: flex;
+			justify-content: space-between;
+
+			.title {
+				font-size: 16px;
+				padding: 4px;
+				border-top: 2px solid var(--grey);
+				border-bottom: 2px solid var(--grey);
+				text-wrap: balance;
+			}
 		}
 		.heading {
-			grid-column: 1 / span 2;
+			grid-column: 1 / span 3;
 			margin: 8px 0 4px;
 		}
-		span {
+		img {
+			width: 24px;
+			margin: 0 auto;
+		}
+		.divider {
+			/* height: 1px; */
+			display: block;
 			border-bottom: 1px solid var(--grey);
-			padding-bottom: 2px;
+			/* color: var(--grey); */
+			width: 100%;
+			grid-column: 1 / span 3;
+			margin-top: 2px;
 		}
 	}
 
@@ -269,6 +320,7 @@
 		justify-content: space-between;
 		align-items: end;
 		gap: 16px;
+		margin-top: 8px;
 
 		a {
 			font-size: 10px;
@@ -284,6 +336,12 @@
 			&:last-of-type {
 				text-align: end;
 			}
+
+			span {
+				font-size: inherit;
+				color: inherit;
+				white-space: nowrap;
+			}
 		}
 	}
 
@@ -298,9 +356,13 @@
 			button {
 				font-size: 14px;
 				padding: 8px 16px;
-				writing-mode: vertical-rl;
 				rotate: 180deg;
-				min-height: 100px;
+				height: 100px;
+				width: 52px;
+
+				span {
+					writing-mode: vertical-rl;
+				}
 			}
 		}
 		.die-section {

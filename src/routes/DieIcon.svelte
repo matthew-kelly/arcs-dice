@@ -5,12 +5,12 @@
 	let { onclick, type, style }: { onclick: () => void; type: DieType; style?: string } = $props();
 </script>
 
-<button transition:fade={{ duration: 100 }} {style} class="die {type}" {onclick}></button>
+<button transition:fade={{ duration: 5000 }} {style} class="die {type}" {onclick}>
+	<span>{type.charAt(0)}</span>
+</button>
 
 <style lang="postcss">
 	.die {
-		/* width: var(--width); */
-		/* height: var(--width); */
 		aspect-ratio: 1 / 1;
 		width: 100%;
 		height: 100%;
@@ -18,12 +18,14 @@
 		border: none;
 		border-radius: 4px;
 		cursor: pointer;
-
 		opacity: 1;
-		transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
 
 		&:hover {
 			scale: 1.1;
+		}
+
+		span {
+			color: var(--white);
 		}
 
 		/* TODO: fix focusing bug once clicked on mobile */

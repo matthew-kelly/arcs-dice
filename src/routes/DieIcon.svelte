@@ -5,7 +5,7 @@
 	let { onclick, type, style }: { onclick: () => void; type: DieType; style?: string } = $props();
 </script>
 
-<button transition:fade={{ duration: 5000 }} {style} class="die {type}" {onclick}>
+<button transition:fade={{ duration: 100 }} {style} class="die {type}" {onclick}>
 	<span>{type.charAt(0)}</span>
 </button>
 

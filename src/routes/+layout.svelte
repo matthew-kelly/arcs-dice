@@ -17,6 +17,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Arcs Dice</title>
+</svelte:head>
+
 <div class="app-container">
 	<h1>Arcs Dice</h1>
 	{@render children()}

@@ -233,6 +233,8 @@
 		}
 	}
 	.die-section {
+		--width: var(--height-calc);
+
 		flex-grow: 1;
 		width: 100%;
 		height: 100%;
@@ -366,6 +368,8 @@
 			}
 		}
 		.die-section {
+			--width: 48px;
+
 			grid-template-columns: 1fr;
 			max-width: 150px;
 		}

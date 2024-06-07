@@ -12,8 +12,10 @@
 <style lang="postcss">
 	.die {
 		aspect-ratio: 1 / 1;
-		width: 100%;
-		height: 100%;
+		/* width: 100%;
+		height: 100%; */
+		width: var(--width);
+		height: var(--width);
 		padding: 0;
 		border: none;
 		border-radius: 4px;

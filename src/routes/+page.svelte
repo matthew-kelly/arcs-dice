@@ -92,6 +92,13 @@
 	}
 </script>
 
+<svelte:head>
+	<meta
+		name="description"
+		content="A dice rolling probability calculator for combat in the board game Arcs by Leder Games. Game designed by Cole Wehrle. Site created by Matty Kelly."
+	/>
+</svelte:head>
+
 <div class="container">
 	<div class="dice-overview">
 		<div class="dice-buttons">

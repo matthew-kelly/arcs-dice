@@ -1,11 +1,13 @@
 <script lang="ts">
-	import { AssaultDie, RaidDie, SkirmishDie, type Die, type DieType, type Icon } from '$lib/dice';
+	import { AssaultDie, RaidDie, SkirmishDie, type DieType, type Icon } from '$lib/dice';
+	import { calcVal, computeProbabilityAtLeastN } from '$lib/calculations';
 	import DieIcon from './DieIcon.svelte';
 	import hitImg from '$lib/images/hit.png';
 	import selfhitImg from '$lib/images/selfhit.png';
 	import interceptImg from '$lib/images/intercept.png';
 	import buildinghitImg from '$lib/images/buildinghit.png';
 	import keyImg from '$lib/images/key.png';
+	import { round } from '$lib/helpers';
 
 	let selectedDice: { [key in DieType]: number } = $state({
 		Skirmish: 0,
@@ -23,10 +25,11 @@
 		buildinghit: 0,
 		miss: 0,
 	};
-	let totalOdds: { [key in 'total' | 'atLeastOne']: { [key in Icon]: number } } = $state({
+	let totalOdds: { [key in 'total' | 'atLeast']: { [key in Icon]: number } } = $state({
 		total: { ...base },
-		atLeastOne: { ...base },
+		atLeast: { ...base },
 	});
+	let min = $state(1);
 
 	function addDie(type: DieType) {
 		if (selectedDice[type] < 6) {
@@ -48,7 +51,7 @@
 			total: {
 				...base,
 			},
-			atLeastOne: {
+			atLeast: {
 				...base,
 			},
 		};
@@ -72,38 +75,20 @@
 			}
 		}
 
+		// odds of at least {min} count
 		for (const [k, v] of Object.entries(odds.total)) {
 			if (v === 0 || k === 'miss') continue;
 			const key = k as Icon;
-			let a = calcAtLeastOne(SkirmishDie, key, selectedDice.Skirmish);
-			let b = calcAtLeastOne(AssaultDie, key, selectedDice.Assault);
-			let c = calcAtLeastOne(RaidDie, key, selectedDice.Raid);
-			// P(A∪B∪C) = P(A) + P(B) + P(C) − P(A∩B) − P(A∩C) − P(B∩C) + P(A∩B∩C)
-			odds.atLeastOne[key] = a + b + c - a * b - a * c - b * c + a * b * c;
+			odds.atLeast[key] = computeProbabilityAtLeastN(
+				key,
+				selectedDice.Assault,
+				selectedDice.Skirmish,
+				selectedDice.Raid,
+				min
+			);
 		}
 
-		totalOdds = { total: odds.total, atLeastOne: odds.atLeastOne };
-	}
-
-	// expected number of icon occurrences
-	function calcVal(total: number, numberOfDice: number) {
-		return (total * numberOfDice) / 6;
-	}
-
-	function calcAtLeastOne(die: Die, icon: Icon, count: number) {
-		return 1 - ((6 - die.faceCounts[icon]) / 6) ** count;
-	}
-
-	function round(num: number, toPercent = false) {
-		const formatter = new Intl.NumberFormat('en-US', {
-			style: 'decimal',
-			maximumFractionDigits: 2,
-			minimumFractionDigits: 0,
-		});
-		if (toPercent) {
-			num = num * 100;
-		}
-		return formatter.format(num);
+		totalOdds = { total: odds.total, atLeast: odds.atLeast };
 	}
 </script>
 
@@ -145,40 +130,50 @@
 		</div>
 	</div>
 
+	<div class="title-row">
+		<span class="title">Expected Number</span>
+		<span class="title col">
+			<span class="wrap">Chance of</span><span class="wrap">
+				at least
+				<div class="select-container">
+					<select bind:value={min} onchange={() => calculateOdds()}>
+						{#each Array(16) as _, i (i)}
+							<option value={i + 1}>{i + 1}</option>
+						{/each}
+					</select>
+				</div>
+			</span>
+		</span>
+	</div>
 	<div class="odds-table">
-		<div class="title-row">
-			<span class="title">Expected Number</span>
-			<span class="title">Chance of at least 1</span>
-		</div>
-
 		<p class="heading">Hits</p>
 		<span>{round(totalOdds.total.hit)}</span>
 		<img src={hitImg} alt="hit icon" />
-		<span>{round(totalOdds.atLeastOne.hit, true) + '%'}</span>
+		<span>{round(totalOdds.atLeast.hit, true) + '%'}</span>
 		<div class="divider"></div>
 
 		<p class="heading">Self Hits</p>
 		<span>{round(totalOdds.total.selfhit)}</span>
 		<img src={selfhitImg} alt="self-hit icon" />
-		<span>{round(totalOdds.atLeastOne.selfhit, true) + '%'}</span>
+		<span>{round(totalOdds.atLeast.selfhit, true) + '%'}</span>
 		<div class="divider"></div>
 
 		<p class="heading">Intercepts</p>
 		<span>{round(totalOdds.total.intercept)}</span>
 		<img src={interceptImg} alt="intercept icon" />
-		<span>{round(totalOdds.atLeastOne.intercept, true) + '%'}</span>
+		<span>{round(totalOdds.atLeast.intercept, true) + '%'}</span>
 		<div class="divider"></div>
 
 		<p class="heading">Keys</p>
 		<span>{round(totalOdds.total.key)}</span>
 		<img src={keyImg} alt="key icon" />
-		<span>{round(totalOdds.atLeastOne.key, true) + '%'}</span>
+		<span>{round(totalOdds.atLeast.key, true) + '%'}</span>
 		<div class="divider"></div>
 
 		<p class="heading">Building Hits</p>
 		<span>{round(totalOdds.total.buildinghit)}</span>
 		<img src={buildinghitImg} alt="building-hit icon" />
-		<span>{round(totalOdds.atLeastOne.buildinghit, true) + '%'}</span>
+		<span>{round(totalOdds.atLeast.buildinghit, true) + '%'}</span>
 		<div class="divider"></div>
 	</div>
 
@@ -276,6 +271,46 @@
 		}
 	}
 
+	.title-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		border-top: 2px solid var(--grey);
+		border-bottom: 2px solid var(--grey);
+		max-width: 386px;
+		width: 100%;
+		margin: 0 auto;
+
+		.title {
+			font-size: 16px;
+			padding: 4px;
+			max-width: 130px;
+			text-wrap: balance;
+			text-align: center;
+
+			.wrap {
+				font-size: inherit;
+				white-space: nowrap;
+				&.col {
+					align-items: center;
+					justify-content: center;
+				}
+			}
+			.select-container {
+				display: inline-block;
+
+				select {
+					-webkit-appearance: none;
+					border: 1px solid var(--black);
+					background: var(--white);
+					color: var(--black);
+					padding-left: 4px;
+					cursor: pointer;
+				}
+			}
+		}
+	}
+
 	.odds-table {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
@@ -284,22 +319,10 @@
 		max-width: 386px;
 		margin: 0 auto;
 
-		.title-row {
-			grid-column: 1 / span 3;
-			display: flex;
-			justify-content: space-between;
-
-			.title {
-				font-size: 16px;
-				padding: 4px;
-				border-top: 2px solid var(--grey);
-				border-bottom: 2px solid var(--grey);
-				text-wrap: balance;
-			}
-		}
 		.heading {
 			grid-column: 1 / span 3;
 			margin: 8px 0 4px;
+			color: inherit;
 		}
 		img {
 			width: 24px;

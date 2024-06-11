@@ -2,8 +2,10 @@ export type DieType = 'Assault' | 'Skirmish' | 'Raid';
 
 export type Icon = 'hit' | 'selfhit' | 'intercept' | 'buildinghit' | 'key' | 'miss';
 
-export type DieFace = {
+type IconTotals = { [key in Icon]: number };
+type DieFace = {
 	face: Icon[];
+	count: IconTotals;
 };
 
 export type Die = {
@@ -16,12 +18,12 @@ export type Die = {
 export const SkirmishDie: Die = {
 	type: 'Skirmish',
 	sides: [
-		{ face: ['miss'] },
-		{ face: ['miss'] },
-		{ face: ['miss'] },
-		{ face: ['hit'] },
-		{ face: ['hit'] },
-		{ face: ['hit'] },
+		{ face: ['miss'], count: { hit: 0, miss: 1, key: 0, selfhit: 0, intercept: 0, buildinghit: 0 } },
+		{ face: ['miss'], count: { hit: 0, miss: 1, key: 0, selfhit: 0, intercept: 0, buildinghit: 0 } },
+		{ face: ['miss'], count: { hit: 0, miss: 1, key: 0, selfhit: 0, intercept: 0, buildinghit: 0 } },
+		{ face: ['hit'], count: { hit: 1, miss: 0, key: 0, selfhit: 0, intercept: 0, buildinghit: 0 } },
+		{ face: ['hit'], count: { hit: 1, miss: 0, key: 0, selfhit: 0, intercept: 0, buildinghit: 0 } },
+		{ face: ['hit'], count: { hit: 1, miss: 0, key: 0, selfhit: 0, intercept: 0, buildinghit: 0 } },
 	],
 	totals: {
 		hit: 3,
@@ -44,12 +46,12 @@ export const SkirmishDie: Die = {
 export const AssaultDie: Die = {
 	type: 'Assault',
 	sides: [
-		{ face: ['hit', 'hit'] },
-		{ face: ['hit', 'hit', 'selfhit'] },
-		{ face: ['hit', 'intercept'] },
-		{ face: ['hit', 'selfhit'] },
-		{ face: ['hit', 'selfhit'] },
-		{ face: ['miss'] },
+		{ face: ['hit', 'hit'], count: { hit: 2, miss: 0, key: 0, selfhit: 0, intercept: 0, buildinghit: 0 } },
+		{ face: ['hit', 'hit', 'selfhit'], count: { hit: 2, miss: 0, key: 0, selfhit: 1, intercept: 0, buildinghit: 0 } },
+		{ face: ['hit', 'intercept'], count: { hit: 1, miss: 0, key: 0, selfhit: 0, intercept: 1, buildinghit: 0 } },
+		{ face: ['hit', 'selfhit'], count: { hit: 1, miss: 0, key: 0, selfhit: 1, intercept: 0, buildinghit: 0 } },
+		{ face: ['hit', 'selfhit'], count: { hit: 1, miss: 0, key: 0, selfhit: 1, intercept: 0, buildinghit: 0 } },
+		{ face: ['miss'], count: { hit: 0, miss: 1, key: 0, selfhit: 0, intercept: 0, buildinghit: 0 } },
 	],
 	totals: {
 		hit: 7,
@@ -72,12 +74,12 @@ export const AssaultDie: Die = {
 export const RaidDie: Die = {
 	type: 'Raid',
 	sides: [
-		{ face: ['key', 'key', 'intercept'] },
-		{ face: ['key', 'selfhit'] },
-		{ face: ['key', 'buildinghit'] },
-		{ face: ['selfhit', 'buildinghit'] },
-		{ face: ['selfhit', 'buildinghit'] },
-		{ face: ['intercept'] },
+		{ face: ['key', 'key', 'intercept'], count: { hit: 0, miss: 0, key: 2, selfhit: 0, intercept: 1, buildinghit: 0 } },
+		{ face: ['key', 'selfhit'], count: { hit: 0, miss: 0, key: 1, selfhit: 1, intercept: 0, buildinghit: 0 } },
+		{ face: ['key', 'buildinghit'], count: { hit: 0, miss: 0, key: 1, selfhit: 0, intercept: 0, buildinghit: 1 } },
+		{ face: ['selfhit', 'buildinghit'], count: { hit: 0, miss: 0, key: 0, selfhit: 1, intercept: 0, buildinghit: 1 } },
+		{ face: ['selfhit', 'buildinghit'], count: { hit: 0, miss: 0, key: 0, selfhit: 1, intercept: 0, buildinghit: 1 } },
+		{ face: ['intercept'], count: { hit: 0, miss: 0, key: 0, selfhit: 0, intercept: 1, buildinghit: 0 } },
 	],
 	totals: {
 		key: 4,

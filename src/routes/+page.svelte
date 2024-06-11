@@ -287,14 +287,14 @@
 			max-width: 130px;
 			text-wrap: balance;
 			text-align: center;
+			&.col {
+				align-items: center;
+				justify-content: center;
+			}
 
 			.wrap {
 				font-size: inherit;
 				white-space: nowrap;
-				&.col {
-					align-items: center;
-					justify-content: center;
-				}
 			}
 			.select-container {
 				display: inline-block;

@@ -319,14 +319,18 @@
 		max-width: 386px;
 		margin: 0 auto;
 
+		span {
+			min-height: 24px;
+		}
 		.heading {
 			grid-column: 1 / span 3;
 			margin: 8px 0 4px;
 			color: inherit;
 		}
 		img {
-			width: 24px;
-			margin: 0 auto;
+			max-height: 24px;
+			max-width: 24px;
+			margin: auto;
 		}
 		.divider {
 			/* height: 1px; */

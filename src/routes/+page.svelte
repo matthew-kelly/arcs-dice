@@ -144,7 +144,7 @@
 				at least
 				<div class="select-container">
 					<select bind:value={min} onchange={() => calculateOdds()}>
-						{#each Array(16) as _, i (i)}
+						{#each Array(12) as _, i (i)}
 							<option value={i + 1}>{i + 1}</option>
 						{/each}
 					</select>

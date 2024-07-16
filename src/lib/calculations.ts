@@ -20,8 +20,8 @@ export function computeProbabilityAtLeastN(
 	const raid = RaidDie.sides.map((side) => side.count[icon]);
 
 	// choose the two dice for given icon
-	let dice1Sides = assault;
-	let countDice1 = assaultDiceCount;
+	const dice1Sides = assault;
+	const countDice1 = assaultDiceCount;
 	let dice2Sides: number[];
 	let countDice2: number;
 	if (icon === 'hit') {

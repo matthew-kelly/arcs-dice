@@ -1,33 +1,22 @@
-# create-svelte
+# Arcs Dice
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+[![Netlify Status](https://api.netlify.com/api/v1/badges/6c68f0f0-3952-4889-99ef-342b7f6b949c/deploy-status)](https://app.netlify.com/sites/arcs-dice/deploys)
 
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+Arcs Dice is a dice rolling probability calculator for combat in the board game [`Arcs by Cole Wehrle & Leder Games`](https://ledergames.com/products/arcs). Arcs Dice is written in Svelte with TypeScript using [`SvelteKit`](https://kit.svelte.dev/).
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Install dependencies with `npm install` (or `pnpm install` or `yarn`), then start a development server:
 
 ```bash
-npm run dev
+npm install
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+npm run dev
 ```
 
 ## Building
 
-To create a production version of your app:
+To create a production version of the app:
 
 ```bash
 npm run build

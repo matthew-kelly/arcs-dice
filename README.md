@@ -2,7 +2,7 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/6c68f0f0-3952-4889-99ef-342b7f6b949c/deploy-status)](https://app.netlify.com/sites/arcs-dice/deploys)
 
-Arcs Dice is a dice rolling probability calculator for combat in the board game [`Arcs by Cole Wehrle & Leder Games`](https://ledergames.com/products/arcs). Arcs Dice is written in Svelte with TypeScript using [`SvelteKit`](https://kit.svelte.dev/).
+Arcs Dice is a dice rolling probability calculator for combat in the board game [Arcs by Cole Wehrle & Leder Games](https://ledergames.com/products/arcs). Arcs Dice is written in Svelte with TypeScript using [SvelteKit](https://kit.svelte.dev/).
 
 ## Developing
 

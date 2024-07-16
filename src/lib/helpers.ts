@@ -7,5 +7,10 @@ export function round(num: number, toPercent = false) {
 	if (toPercent) {
 		num = num * 100;
 	}
-	return formatter.format(num);
+	let res = formatter.format(num);
+	// fix rounding to 100%, impossible result
+	if (toPercent && res === '100') {
+		res = '99.99';
+	}
+	return res;
 }

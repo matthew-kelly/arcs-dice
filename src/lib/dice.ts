@@ -3,7 +3,8 @@ export type DieType = 'Assault' | 'Skirmish' | 'Raid';
 export type Icon = 'hit' | 'selfhit' | 'intercept' | 'buildinghit' | 'key' | 'miss';
 
 type IconTotals = { [key in Icon]: number };
-type DieFace = {
+
+export type DieFace = {
 	face: Icon[];
 	count: IconTotals;
 };

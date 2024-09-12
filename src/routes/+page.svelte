@@ -8,12 +8,15 @@
 	import buildinghitImg from '$lib/images/buildinghit.png';
 	import keyImg from '$lib/images/key.png';
 	import { round } from '$lib/helpers';
+	import { rollAllDice } from '$lib/roll';
+	import Modal from './Modal.svelte';
 
 	let selectedDice: { [key in DieType]: number } = $state({
 		Skirmish: 0,
 		Assault: 0,
 		Raid: 0,
 	});
+	let totalDice = $derived(Object.values(selectedDice).reduce((acc, current) => acc + current, 0));
 	let skirmishDice = $derived(selectedDice['Skirmish']);
 	let assaultDice = $derived(selectedDice['Assault']);
 	let raidDice = $derived(selectedDice['Raid']);
@@ -30,6 +33,8 @@
 		atLeast: { ...base },
 	});
 	let min = $state(1);
+	let showModal = $state(false);
+	let simResults = $state({ ...base });
 
 	function addDie(type: DieType) {
 		if (selectedDice[type] < 6) {
@@ -90,12 +95,20 @@
 
 		totalOdds = { total: odds.total, atLeast: odds.atLeast };
 	}
+
+	function simulateRoll() {
+		// TODO: visuals of each die rolled from results table
+		let { results, totals } = rollAllDice(selectedDice);
+		simResults = { ...totals };
+
+		showModal = true;
+	}
 </script>
 
 <svelte:head>
 	<meta
 		name="description"
-		content="A dice rolling probability calculator for combat in the board game Arcs by Leder Games. Game designed by Cole Wehrle. Site created by Matty Kelly."
+		content="A dice roller and dice rolling probability calculator for combat in the board game Arcs by Leder Games. Game designed by Cole Wehrle. Site created by Matty Kelly."
 	/>
 </svelte:head>
 
@@ -184,6 +197,12 @@
 		<div class="divider"></div>
 	</div>
 
+	<div class="row jcc aic" style="margin-top: 8px;">
+		<button class="utility" style="padding: 8px 16px;" disabled={totalDice === 0} onclick={simulateRoll}>
+			Roll Dice
+		</button>
+	</div>
+
 	<div class="credit">
 		<a href="https://ledergames.com/products/arcs" target="_blank">
 			Arcs by <span>Leder Games</span>
@@ -193,6 +212,45 @@
 		</a>
 	</div>
 </div>
+
+<Modal bind:showModal>
+	<h2 slot="header" style="font-size: 16px;">Results</h2>
+	<div class="results-grid">
+		{#if simResults.hit !== 0}
+			<div class="result">
+				<img src={hitImg} alt="hit icon" />
+				<span>{simResults.hit}</span>
+			</div>
+		{/if}
+		{#if simResults.selfhit !== 0}
+			<div class="result">
+				<img src={selfhitImg} alt="self-hit icon" />
+				<span>{simResults.selfhit}</span>
+			</div>
+		{/if}
+		{#if simResults.intercept !== 0}
+			<div class="result">
+				<img src={interceptImg} alt="intercept icon" />
+				<span>{simResults.intercept}</span>
+			</div>
+		{/if}
+		{#if simResults.key !== 0}
+			<div class="result">
+				<img src={keyImg} alt="key icon" />
+				<span>{simResults.key}</span>
+			</div>
+		{/if}
+		{#if simResults.buildinghit !== 0}
+			<div class="result">
+				<img src={buildinghitImg} alt="building-hit icon" />
+				<span>{simResults.buildinghit}</span>
+			</div>
+		{/if}
+		{#if simResults.miss === totalDice}
+			<div class="result" style="height: 32px;"><span>Miss!</span></div>
+		{/if}
+	</div>
+</Modal>
 
 <style lang="postcss">
 	.container {
@@ -378,6 +436,40 @@
 				color: inherit;
 				white-space: nowrap;
 			}
+		}
+	}
+
+	.results-grid {
+		/* display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: 1fr 1fr 1fr; */
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px;
+		max-width: 12rem;
+
+		.result {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-grow: 1;
+			min-width: calc(50% - 2px);
+			/* width: 50%; */
+
+			img {
+				max-height: 32px;
+				max-width: 32px;
+				margin: 0 4px;
+			}
+
+			span {
+				display: block;
+				font-size: 16px;
+			}
+
+			/* &:last-of-type {
+				grid-column: 1 / span 2;
+			} */
 		}
 	}
 

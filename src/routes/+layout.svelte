@@ -45,5 +45,10 @@
 		color: var(--white);
 		margin: 12px 0;
 		font-size: 32px;
+
+		@media (max-width: 512px) {
+			font-size: 28px;
+			margin: 8px 0;
+		}
 	}
 </style>

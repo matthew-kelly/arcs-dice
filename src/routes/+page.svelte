@@ -108,7 +108,7 @@
 <svelte:head>
 	<meta
 		name="description"
-		content="A dice roller and dice rolling probability calculator for combat in the board game Arcs by Leder Games. Game designed by Cole Wehrle. Site created by Matty Kelly."
+		content="A dice roller and dice rolling probability calculator for combat in the board game Arcs by Buried Giant Studios. Game designed by Cole Wehrle. Site created by Matty Kelly."
 	/>
 </svelte:head>
 
@@ -204,8 +204,8 @@
 	</div>
 
 	<div class="credit">
-		<a href="https://ledergames.com/products/arcs" target="_blank">
-			Arcs by <span>Leder Games</span>
+		<a href="https://buriedgiantstudios.com/" target="_blank">
+			Arcs by <span>Buried Giant Studios</span>
 		</a>
 		<a href="https://matthewkelly.ca" target="_blank">
 			Site by <span>Matty Kelly</span>
